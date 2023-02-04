@@ -5,7 +5,11 @@ import entities.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Queue;
 
 public class JpaTest {
 
@@ -40,11 +44,17 @@ public class JpaTest {
 
 		jpaTest.listUsers();
 
+		// implementing criteria queries
+		jpaTest.listBugTickets();
+		jpaTest.listFeatureTickets();
+
 
 		manager.close();
 		EntityManagerHelper.closeEntityManagerFactory();
 		//		factory.close();
 	}
+
+
 
 	private void createSupportMembers() {
 		int numOfSupportMembers = manager.createQuery("Select s From SupportMember s", SupportMember.class).getResultList().size();
@@ -84,21 +94,21 @@ public class JpaTest {
 			SupportMember sp1 = resultList2.get(0);
 			SupportMember sp2 = resultList2.get(1);
 
-			Ticket ticket = new Ticket();
+			Ticket ticket = new BugForm();
 			ticket.setUser(user);
 			ticket.setSupportMemberList(List.of(sp1,sp2));
-			ticket.setTitle("Ticket test 1");
+			ticket.setTitle("Bug Ticket test");
 			ticket.setState(StateEnum.OPEN);
 			ticket.setTag(TagEnum.TAG1);
 			manager.persist(ticket);
 
-			User user1 = resultList.get(0);
+			User user1 = resultList.get(1);
 			SupportMember sp3 = resultList2.get(2);
 
-			Ticket ticket1 = new Ticket();
-			ticket1.setSupportMemberList(List.of(sp3));
-			ticket1.setUser(user);
-			ticket1.setTitle("Ticket test 2");
+			Ticket ticket1 = new FeatureRequestForm();
+			//ticket1.setSupportMemberList(List.of(sp3)); we're not going to assign a support yet to a feature form
+			ticket1.setUser(user1);
+			ticket1.setTitle("Request form test");
 			ticket1.setState(StateEnum.OPEN);
 			ticket1.setTag(TagEnum.TAG2);
 			manager.persist(ticket1);
@@ -112,6 +122,37 @@ public class JpaTest {
 		for(User nextUser : resultList){
 			System.out.println("user:"+nextUser.getName());
 		}
+	}
+
+	private void listBugTickets() {
+		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+		CriteriaQuery<Ticket> criteriaQuery = criteriaBuilder.createQuery(Ticket.class);
+		Root<Ticket> root = criteriaQuery.from(Ticket.class);
+		criteriaQuery.select(root);
+		//criteriaQuery.where(criteriaBuilder.equal(root.get("type"),"B"));
+		criteriaQuery.where(criteriaBuilder.equal(root.type(),BugForm.class));
+
+		List<Ticket> tickets = manager.createQuery(criteriaQuery).getResultList();
+		for(Ticket ticket : tickets){
+			System.out.println("Ticket:"+ticket.getTitle());
+		}
+
+	}
+
+	private void listFeatureTickets() {
+
+		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+		CriteriaQuery<Ticket> criteriaQuery = criteriaBuilder.createQuery(Ticket.class);
+		Root<Ticket> root = criteriaQuery.from(Ticket.class);
+		criteriaQuery.select(root);
+		//criteriaQuery.where(criteriaBuilder.equal(root.get("type"),"FR"));
+		criteriaQuery.where(criteriaBuilder.equal(root.type(),FeatureRequestForm.class));
+
+		List<Ticket> tickets = manager.createQuery(criteriaQuery).getResultList();
+		for(Ticket ticket : tickets){
+			System.out.println("Ticket:"+ticket.getTitle());
+		}
+
 	}
 
 

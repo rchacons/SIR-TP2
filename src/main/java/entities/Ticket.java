@@ -6,7 +6,9 @@ import java.util.List;
 
 @Entity
 //@Table(name="Tickets")
-public class Ticket {
+@DiscriminatorColumn(name="type", discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Ticket {
 
     private Long id;
 
