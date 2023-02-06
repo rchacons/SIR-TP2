@@ -1,15 +1,13 @@
 package jpa;
 
-import entities.*;
+import dao.EntityManagerHelper;
+import dao.PersonDAO;
+import dao.TicketDAO;
+import domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.Queue;
 
 public class JpaTest {
 
@@ -30,9 +28,7 @@ public class JpaTest {
 
 		tx.begin();
 
-
 		try {
-
 			jpaTest.createUsers();
 			jpaTest.createSupportMembers();
 			jpaTest.createTickets();
@@ -57,82 +53,92 @@ public class JpaTest {
 
 
 	private void createSupportMembers() {
-		int numOfSupportMembers = manager.createQuery("Select s From SupportMember s", SupportMember.class).getResultList().size();
-
-		SupportMember sp1 = new SupportMember();
-		sp1.setName("SupportMember1");
-
-		SupportMember sp2 = new SupportMember();
-		sp2.setName("SupportMember2");
-
-		SupportMember sp3 = new SupportMember();
-		sp3.setName("SupportMember3");
+		PersonDAO personDAO = new PersonDAO();
+		int numOfSupportMembers = personDAO.getNumberOfSupportMembers();
 
 		if(numOfSupportMembers == 0){
-			manager.persist(sp1);
-			manager.persist(sp2);
-			manager.persist(sp3);
+
+			SupportMember sp1 = new SupportMember();
+			sp1.setName("SupportMember1");
+			personDAO.save(sp1);
+
+			SupportMember sp2 = new SupportMember();
+			sp2.setName("SupportMember2");
+			personDAO.save(sp2);
+
+			SupportMember sp3 = new SupportMember();
+			sp3.setName("SupportMember3");
+			personDAO.save(sp3);
+
 		}
 	}
 
 	private void createUsers() {
-		int numOfUsers = manager.createQuery("Select u From User u", User.class).getResultList().size();
+		PersonDAO personDAO = new PersonDAO();
+
+		int numOfUsers = personDAO.getNumberOfUsers();
 
 		if(numOfUsers == 0){
-			manager.persist(new User("User1"));
-			manager.persist(new User("User2"));
+			User user1 = new User();
+			user1.setName("User1");
+
+			User user2 = new User();
+			user2.setName("User2");
+
+			personDAO.save(user1);
+			personDAO.save(user2);
 		}
 	}
 
 	private void createTickets() {
 
-		List<User> resultList = manager.createQuery("select u from User u", User.class).getResultList();
-		List<SupportMember> resultList2 = manager.createQuery("select s from SupportMember s",SupportMember.class).getResultList();
+		TicketDAO ticketDAO = new TicketDAO();
+		PersonDAO personDAO = new PersonDAO();
 
-		if(resultList.size()>=1){
-			User user = resultList.get(0);
-			SupportMember sp1 = resultList2.get(0);
-			SupportMember sp2 = resultList2.get(1);
+		List<Person> users = personDAO.getAllUsers();
+		List<Person> supportMembers = personDAO.getAllSupportMembers();
+		int nbOfTickets = ticketDAO.getNumberOfAllTickets();
 
+		if(users.size()>=1 && nbOfTickets==0){
+			User user = (User) users.get(0);
+			SupportMember sp1 = (SupportMember) supportMembers.get(0);
+			SupportMember sp2 = (SupportMember) supportMembers.get(1);
+
+			// Bug ticket
 			Ticket ticket = new BugForm();
 			ticket.setUser(user);
 			ticket.setSupportMemberList(List.of(sp1,sp2));
 			ticket.setTitle("Bug Ticket test");
 			ticket.setState(StateEnum.OPEN);
 			ticket.setTag(TagEnum.TAG1);
-			manager.persist(ticket);
+			ticketDAO.save(ticket);
 
-			User user1 = resultList.get(1);
-			SupportMember sp3 = resultList2.get(2);
+
+			Person user1 = users.get(1);
 
 			Ticket ticket1 = new FeatureRequestForm();
-			//ticket1.setSupportMemberList(List.of(sp3)); we're not going to assign a support yet to a feature form
 			ticket1.setUser(user1);
 			ticket1.setTitle("Request form test");
 			ticket1.setState(StateEnum.OPEN);
 			ticket1.setTag(TagEnum.TAG2);
-			manager.persist(ticket1);
+			ticketDAO.save(ticket1);
 		}
 
 
 	}
 
 	private void listUsers() {
-		List<User> resultList = manager.createQuery("select u from User u", User.class).getResultList();
-		for(User nextUser : resultList){
+		PersonDAO personDAO = new PersonDAO();
+		List<Person> resultList = personDAO.getAllUsers();
+		for(Person nextUser : resultList){
 			System.out.println("user:"+nextUser.getName());
 		}
 	}
 
 	private void listBugTickets() {
-		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-		CriteriaQuery<Ticket> criteriaQuery = criteriaBuilder.createQuery(Ticket.class);
-		Root<Ticket> root = criteriaQuery.from(Ticket.class);
-		criteriaQuery.select(root);
-		//criteriaQuery.where(criteriaBuilder.equal(root.get("type"),"B"));
-		criteriaQuery.where(criteriaBuilder.equal(root.type(),BugForm.class));
+		TicketDAO ticketDAO = new TicketDAO();
 
-		List<Ticket> tickets = manager.createQuery(criteriaQuery).getResultList();
+		List<Ticket> tickets = ticketDAO.getBugTickets();
 		for(Ticket ticket : tickets){
 			System.out.println("Ticket:"+ticket.getTitle());
 		}
@@ -141,14 +147,9 @@ public class JpaTest {
 
 	private void listFeatureTickets() {
 
-		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-		CriteriaQuery<Ticket> criteriaQuery = criteriaBuilder.createQuery(Ticket.class);
-		Root<Ticket> root = criteriaQuery.from(Ticket.class);
-		criteriaQuery.select(root);
-		//criteriaQuery.where(criteriaBuilder.equal(root.get("type"),"FR"));
-		criteriaQuery.where(criteriaBuilder.equal(root.type(),FeatureRequestForm.class));
+		TicketDAO ticketDAO = new TicketDAO();
 
-		List<Ticket> tickets = manager.createQuery(criteriaQuery).getResultList();
+		List<Ticket> tickets = ticketDAO.getFeatureRequestTickets();
 		for(Ticket ticket : tickets){
 			System.out.println("Ticket:"+ticket.getTitle());
 		}

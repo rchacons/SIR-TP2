@@ -1,2 +1,4 @@
-jpa/EntityManagerHelper.class
+servlet/UserInfo.class
+servlet/MyServlet.class
 jpa/JpaTest.class
+servlet/DataManager.class

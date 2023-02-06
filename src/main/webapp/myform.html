@@ -1,0 +1,156 @@
+<html>
+<head>
+    <style>
+        .container {
+            background: gray;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .left-side {
+            width: 40%;
+            padding: 20px;
+            border: 1px solid lightgray;
+        }
+
+        .right-side {
+            width: 60%;
+            padding: 20px;
+            border: 1px solid lightgray;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+    <title> TP Ticket Management</title>
+</head>
+<body onload="sendGetRequest()">
+<div class="container">
+    <div class="left-side">
+        <h2>Insert an element in the database:</h2>
+        <form method="POST" action="/dataManager">
+
+            <label for="type">Type:</label>
+            <select id="type" name="type" onchange="showForm()">
+                <option value="ticket" selected>Ticket</option>
+                <option value="user">User</option>
+                <option value="support">Support</option>
+            </select>
+
+            <label for="userId" id="userId-label">User id:</label>
+            <input type="text" id="userId">
+
+            <label for="typeTicket" id="typeTicket-label">Type of ticket:</label>
+            <select id="typeTicket" name="typeTicket">
+                <option value="bug">Bug</option>
+                <option value="feature">Feature Request</option>
+            </select>
+
+            <label for="name" id="name-label" style="display: none;">Name:</label>
+            <input type="text" id="name" style="display: none;">
+
+            <label for="title" id="title-label">Title:</label>
+            <input type="text" id="title">
+
+            <label for="comments" id="comments-label">Comments:</label>
+            <textarea id="comments"></textarea>
+
+            <label for="tag" id="tag-label">Tag:</label>
+            <input type="text" id="tag">
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="right-side" id="response">
+        <h2>Inserted values: </h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Comments</th>
+                <th>Tag</th>
+            </tr>
+            </thead>
+            <tbody id="data">
+            <!-- data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function sendGetRequest() {
+        fetch("/dataManager")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("response").innerHTML = data;
+            });
+    }
+</script>
+<script>
+    function showForm() {
+        var type = document.getElementById("type").value;
+        var nameLabel = document.getElementById("name-label");
+        var nameInput = document.getElementById("name");
+        var titleLabel = document.getElementById("title-label");
+        var titleInput = document.getElementById("title");
+        var commentsLabel = document.getElementById("comments-label");
+        var commentInput = document.getElementById("comments")
+        var tagLabel = document.getElementById("tag-label");
+        var tagInput = document.getElementById("tag")
+        var userIdLabel = document.getElementById("userId-label");
+        var userIdInput = document.getElementById("userId");
+        var ticketType = document.getElementById("typeTicket");
+        var ticketTypeLabel = document.getElementById("typeTicket-label");
+
+        if (type === "user" || type === "support") {
+            nameLabel.style.display = "block";
+            nameInput.style.display = "block";
+            userIdLabel.style.display = "none";
+            userIdInput.style.display ="none";
+            titleLabel.style.display = "none";
+            titleInput.style.display = "none"
+            commentsLabel.style.display = "none";
+            commentInput.style.display = "none";
+            tagLabel.style.display = "none";
+            tagInput.style.display = "none";
+            ticketType.style.display = "none";
+            ticketTypeLabel.style.display = "none";
+
+        } else {
+            nameLabel.style.display = "none";
+            nameInput.style.display = "none";
+
+            userIdLabel.style.display = "block";
+            userIdInput.style.display ="block";
+
+            titleLabel.style.display = "block";
+            titleInput.style.display = "block"
+            commentInput.style.display = "block";
+            commentsLabel.style.display = "block";
+            tagInput.style.display = "block";
+            tagLabel.style.display = "block";
+        }
+    }
+</script>
+
+</body>
+</html>
