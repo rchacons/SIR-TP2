@@ -24,11 +24,13 @@ public class DataManager extends HttpServlet {
 
     PersonDAO personDAO;
     TicketDAO ticketDAO;
+    EntityManager manager;
 
     @Override
     public void init() throws ServletException {
         personDAO = new PersonDAO();
         ticketDAO = new TicketDAO();
+        manager = EntityManagerHelper.getEntityManager();
         super.init();
     }
 
@@ -37,7 +39,6 @@ public class DataManager extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        EntityManager manager = EntityManagerHelper.getEntityManager();
         EntityTransaction transaction = manager.getTransaction();
         transaction.begin();
 
@@ -72,6 +73,7 @@ public class DataManager extends HttpServlet {
         }
 
         transaction.commit();
+
 
         response.sendRedirect("/myform.html");
     }
