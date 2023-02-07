@@ -45,7 +45,6 @@ public class DataManager extends HttpServlet {
         switch (request.getParameter("type")) {
             case "ticket":
                 Ticket ticket;
-                // Retrieve all the info from ticket and insert it
                 if(request.getParameter("typeTicket").equals("bug")){
                     ticket = new BugForm();
                 }
@@ -53,7 +52,6 @@ public class DataManager extends HttpServlet {
                     ticket = new FeatureRequestForm();
                 }
 
-                log.info("User id: "+request.getParameter("userId"));
                 ticket.setUser(personDAO.read(Long.valueOf(request.getParameter("userId"))));
                 ticket.setTitle(request.getParameter("title"));
                 //ticket.setComments(request.getParameter("comments"));
@@ -64,12 +62,41 @@ public class DataManager extends HttpServlet {
                 break;
             case "user":
                 //Insert user
-                log.info("Is user");
+                User user = new User();
+                user.setName(request.getParameter("name"));
+                personDAO.save(user);
                 break;
             case "support":
-                //Insert support
-                log.info("Is support");
+                SupportMember supportMember = new SupportMember();
+                supportMember.setName(request.getParameter("name"));
+                personDAO.save(supportMember);
                 break;
+            case "assign":
+                if(request.getParameter("ticketId") != null && request.getParameter("supportId") != null){
+                    log.info("ON EST ICI1");
+                    Ticket ticket1 = ticketDAO.read(Long.valueOf(request.getParameter("ticketId")));
+                    Person supportMember1 = personDAO.read(Long.valueOf(request.getParameter("supportId")));
+
+                    if(ticket1 != null && supportMember1 != null){
+                        log.info("ON EST ICI2");
+
+                        SupportMember supportM = (SupportMember) supportMember1;
+
+                        if(ticket1.getSupportMemberList() != null){
+                            log.info("ON EST ICI3");
+
+                            ticket1.getSupportMemberList().add(supportM);
+                        }
+                        else{
+                            log.info("ON EST ICI4");
+
+                            ticket1.setSupportMemberList(List.of(supportM));
+                        }
+                        ticketDAO.update(ticket1);
+
+                    }
+
+                }
         }
 
         transaction.commit();
@@ -91,7 +118,7 @@ public class DataManager extends HttpServlet {
 
         writeTableOfTickets(out,ticketList);
         writeTableOfPeople(out,personList);
-        writeTableOfTicketsAssignedToSupport(out,supportMembers);
+        writeTableOfTicketsAssignedToSupport(out,ticketList);
 
         out.close();
 
@@ -167,7 +194,7 @@ public class DataManager extends HttpServlet {
 
     }
 
-    private void writeTableOfTicketsAssignedToSupport(PrintWriter printWriter, List<Person> supportMembers) {
+    private void writeTableOfTicketsAssignedToSupport(PrintWriter printWriter, List<Ticket> ticketList) {
 
         printWriter.println("<h2>Tickets assigned to support members :<h2>");
         printWriter.println("<table>");
@@ -181,19 +208,17 @@ public class DataManager extends HttpServlet {
         printWriter.println("</thead>");
         printWriter.println("<tbody>");
 
-        for(Person supportMember: supportMembers){
-            SupportMember supportMember1 = (SupportMember) supportMember;
-
-            for(Ticket ticketAssigned  : supportMember1.getTicketList()){
+        for (Ticket ticket : ticketList){
+            for(SupportMember supportMember : ticket.getSupportMemberList()){
                 printWriter.println("<tr>");
 
-                printWriter.println("<td>"+ticketAssigned.getId()+"</td>");
-                printWriter.println("<td>"+supportMember1.getName()+"</td>");
+                printWriter.println("<td>"+ticket.getId()+"</td>");
+                printWriter.println("<td>"+supportMember.getName()+"</td>");
 
                 printWriter.println("</tr>");
             }
-
         }
+
 
         printWriter.println("</tbody>");
 

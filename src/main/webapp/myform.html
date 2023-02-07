@@ -74,7 +74,16 @@
                 <option value="ticket" selected>Ticket</option>
                 <option value="user">User</option>
                 <option value="support">Support</option>
+                <option value="assign">Assign Ticket to Support</option>
             </select>
+
+            <label for="ticketId" id="ticketId-label" style="display: none;">Ticket id:</label>
+            <input type="text" id="ticketId" name="ticketId" style="display: none;">
+
+            <label for="supportId" id="supportId-label" style="display: none;">Support id:</label>
+            <input type="text" id="supportId" name="supportId" style="display: none;">
+
+
 
             <label for="userId" id="userId-label">User id:</label>
             <input type="text" id="userId" name="userId">
@@ -132,6 +141,10 @@
         var userIdInput = document.getElementById("userId");
         var ticketType = document.getElementById("typeTicket");
         var ticketTypeLabel = document.getElementById("typeTicket-label");
+        var ticketId = document.getElementById("ticketId");
+        var ticketIdLabel = document.getElementById("ticketId-label");
+        var supportId = document.getElementById("supportId");
+        var supportIdLabel = document.getElementById("supportId-label");
 
         if (type === "user" || type === "support") {
             nameLabel.style.display = "block";
@@ -146,10 +159,20 @@
             tagInput.style.display = "none";
             ticketType.style.display = "none";
             ticketTypeLabel.style.display = "none";
+            ticketId.style.display = "none";
+            ticketIdLabel.style.display = "none";
+            supportId.style.display = "none";
+            supportIdLabel.style.display = "none";
 
-        } else {
+        } else if(type=="ticket") {
             nameLabel.style.display = "none";
             nameInput.style.display = "none";
+
+            ticketId.style.display = "none";
+            ticketIdLabel.style.display = "none";
+            supportId.style.display = "none";
+            supportIdLabel.style.display = "none";
+
 
             userIdLabel.style.display = "block";
             userIdInput.style.display ="block";
@@ -160,6 +183,26 @@
             commentsLabel.style.display = "block";
             tagInput.style.display = "block";
             tagLabel.style.display = "block";
+        }
+        else{
+            ticketId.style.display = "block";
+            ticketIdLabel.style.display = "block";
+            supportId.style.display = "block";
+            supportIdLabel.style.display = "block";
+
+            nameLabel.style.display = "none";
+            nameInput.style.display = "none";
+            userIdLabel.style.display = "none";
+            userIdInput.style.display ="none";
+            titleLabel.style.display = "none";
+            titleInput.style.display = "none"
+            commentsLabel.style.display = "none";
+            commentInput.style.display = "none";
+            tagLabel.style.display = "none";
+            tagInput.style.display = "none";
+            ticketType.style.display = "none";
+            ticketTypeLabel.style.display = "none";
+
         }
     }
 </script>
