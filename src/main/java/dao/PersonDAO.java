@@ -39,4 +39,8 @@ public class PersonDAO extends GenericDaoJpaImpl<Person,Long> {
     public int getNumberOfSupportMembers(){
         return getAllSupportMembers().size();
     }
+
+    public List<Person> getAllPeople() {
+        return this.entityManager.createQuery("select p from Person p",Person.class).getResultList();
+    }
 }

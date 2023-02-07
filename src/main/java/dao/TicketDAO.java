@@ -33,6 +33,9 @@ public class TicketDAO extends GenericDaoJpaImpl<Ticket,Long> {
 
     }
 
+    public List<Ticket> getAllTickets(){
+        return this.entityManager.createQuery("select t from Ticket t", Ticket.class).getResultList();
+    }
     public int getNumberOfAllTickets() {
         return this.entityManager.createQuery("select t from Ticket t", Ticket.class).getResultList().size();
     }

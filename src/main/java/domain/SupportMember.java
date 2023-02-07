@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("supportMember")
 public class SupportMember extends Person{
 
 
