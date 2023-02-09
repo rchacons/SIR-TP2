@@ -67,7 +67,7 @@
 <div class="container">
     <div class="left-side">
         <h2>Insert an element in the database:</h2>
-        <form method="POST" action="/dataManager">
+        <form method="POST" action="/myServlet">
 
             <label for="type">Type:</label>
             <select id="type" name="type" onchange="showForm()">
@@ -119,7 +119,7 @@
 </div>
 <script>
     function sendGetRequest() {
-        fetch("/dataManager")
+        fetch("/myServlet")
             .then(response => response.text())
             .then(data => {
                 document.getElementById("response").innerHTML = data;

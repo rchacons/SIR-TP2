@@ -1,0 +1,22 @@
+import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
+import org.checkerframework.checker.units.qual.A;
+import rest.TicketResource;
+
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
+
+public class TestApplication extends Application {
+
+    @Override
+    public Set<Class<?>> getClasses() {
+
+        final Set<Class<?>> resources = new HashSet<>();
+
+        resources.add(OpenApiResource.class);
+        resources.add(TicketResource.class);
+
+        return resources;
+    }
+}

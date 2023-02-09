@@ -19,6 +19,9 @@ public abstract class Ticket {
 
     private List<SupportMember> supportMemberList;
 
+    public Ticket(){
+
+    }
 
     private Person user;
     private StateEnum state;

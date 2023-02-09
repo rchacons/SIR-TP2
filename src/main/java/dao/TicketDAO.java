@@ -4,10 +4,13 @@ import domain.BugForm;
 import domain.FeatureRequestForm;
 import domain.Ticket;
 
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Queue;
 
 public class TicketDAO extends GenericDaoJpaImpl<Ticket,Long> {
 
@@ -31,6 +34,12 @@ public class TicketDAO extends GenericDaoJpaImpl<Ticket,Long> {
         return this.entityManager.createQuery(criteriaQuery).getResultList();
 
 
+    }
+
+    public List<Ticket> getTicketsByUser(String userName){
+        Query query = this.entityManager.createQuery("select t from Ticket as t where t.user.name = :user");
+        query.setParameter("user",userName);
+        return query.getResultList();
     }
 
     public List<Ticket> getAllTickets(){
