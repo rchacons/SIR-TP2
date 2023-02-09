@@ -33,6 +33,13 @@ public class TicketDTO {
         return userName;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
     public void setUserName(String userName) {
         this.userName = userName;
     }

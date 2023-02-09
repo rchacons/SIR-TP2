@@ -1,5 +1,6 @@
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import org.checkerframework.checker.units.qual.A;
+import rest.PersonResource;
 import rest.TicketResource;
 
 import javax.ws.rs.ApplicationPath;
@@ -16,6 +17,7 @@ public class TestApplication extends Application {
 
         resources.add(OpenApiResource.class);
         resources.add(TicketResource.class);
+        resources.add(PersonResource.class);
 
         return resources;
     }

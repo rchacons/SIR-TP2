@@ -12,13 +12,42 @@ import java.util.List;
 
 public class PersonDAO extends GenericDaoJpaImpl<Person,Long> {
 
+
+    public Person getPersonByName(String userName){
+        CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Person> criteriaQuery = criteriaBuilder.createQuery(Person.class);
+        Root<Person> root = criteriaQuery.from(Person.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.equal(root.get("name"),userName));
+
+        try{
+            return this.entityManager.createQuery(criteriaQuery).getSingleResult();
+        } catch (NoResultException e){
+            return null;
+        }
+    }
+    public Person getSupportMemberByName(String userName){
+        CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Person> criteriaQuery = criteriaBuilder.createQuery(Person.class);
+        Root<Person> root = criteriaQuery.from(Person.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.and(criteriaBuilder.equal(root.type(), SupportMember.class),
+                criteriaBuilder.equal(root.get("name"),userName)));
+
+        try{
+            return this.entityManager.createQuery(criteriaQuery).getSingleResult();
+        } catch (NoResultException e){
+            return null;
+        }
+    }
+
     public Person getUserByName(String userName){
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<Person> criteriaQuery = criteriaBuilder.createQuery(Person.class);
         Root<Person> root = criteriaQuery.from(Person.class);
         criteriaQuery.select(root);
         criteriaQuery.where(criteriaBuilder.and(criteriaBuilder.equal(root.type(), User.class),
-                                criteriaBuilder.equal(root.get("name"),userName)));
+                criteriaBuilder.equal(root.get("name"),userName)));
 
         try{
             return this.entityManager.createQuery(criteriaQuery).getSingleResult();

@@ -47,9 +47,9 @@ public class TicketService {
         Ticket ticket = null;
 
         // TODO: Not so fan of this verification
-        if (ticketDTO.type.equals("BugForm"))
+        if (ticketDTO.getType().equals("BugForm"))
             ticket = new BugForm();
-        else if (ticketDTO.type.equals("FeatureRequestForm"))
+        else if (ticketDTO.getType().equals("FeatureRequestForm"))
             ticket = new FeatureRequestForm();
 
         //TODO improve this
