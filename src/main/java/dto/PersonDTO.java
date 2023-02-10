@@ -1,10 +1,12 @@
 package dto;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public abstract class PersonDTO {
 
     private Long id;
+    @NotNull(message = "Name may not be null")
     private String name;
 
     private PersonType type;

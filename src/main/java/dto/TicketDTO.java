@@ -5,8 +5,8 @@ public class TicketDTO {
 
     public Long id;
     public String title;
-    public String type;
-    public String userName;
+    public TicketType type;
+    public String creator;
     public String state;
     public String tag;
 
@@ -14,12 +14,25 @@ public class TicketDTO {
         // Empty constructor
     }
 
-    public TicketDTO(String title, String type,String userName, String state, String tag){
+    public TicketDTO(String title, TicketType type,String userName, String state, String tag){
         this.title=title;
         this.type=type;
-        this.userName=userName;
+        this.creator =userName;
         this.state=state;
         this.tag=tag;
+    }
+
+    public enum TicketType {
+        BUG, FEATURE
+    }
+
+
+    public TicketType getType() {
+        return type;
+    }
+
+    public void setType(TicketType type) {
+        this.type = type;
     }
     public String getTitle() {
         return title;
@@ -29,19 +42,13 @@ public class TicketDTO {
         this.title = title;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getCreator() {
+        return creator;
     }
 
-    public String getType() {
-        return type;
-    }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getState() {
@@ -75,7 +82,7 @@ public class TicketDTO {
                 "id='"+id+'\''+
                 "title='" + title + '\'' +
                 ", type='" + type + '\'' +
-                ", userName='" + userName + '\'' +
+                ", userName='" + creator + '\'' +
                 ", state='" + state + '\'' +
                 ", tag='" + tag + '\'' +
                 '}';

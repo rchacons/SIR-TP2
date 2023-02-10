@@ -9,7 +9,6 @@ import dto.TicketDTO;
 import javax.naming.InvalidNameException;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +28,8 @@ public class TicketService {
         List<TicketDTO> ticketDTOS = new ArrayList<TicketDTO>();
 
         for (Ticket ticket : tickets) {
-            String type = "";
-            if (ticket instanceof BugForm) {
-                type = "bug";
-            } else {
-                type = "feature";
-            }
+            TicketDTO.TicketType type = (ticket instanceof BugForm) ? TicketDTO.TicketType.BUG : TicketDTO.TicketType.FEATURE;
+
             ticketDTOS.add(new TicketDTO(ticket.getTitle(), type, ticket.getUser().getName(),
                     ticket.getState().toString(), ticket.getTag().toString()));
         }
@@ -46,15 +41,14 @@ public class TicketService {
     public TicketDTO createTicket(TicketDTO ticketDTO) throws InvalidNameException {
         Ticket ticket = null;
 
-        // TODO: Not so fan of this verification
-        if (ticketDTO.getType().equals("BugForm"))
+
+        if (ticketDTO.getType() == TicketDTO.TicketType.BUG)
             ticket = new BugForm();
-        else if (ticketDTO.getType().equals("FeatureRequestForm"))
+        else if (ticketDTO.getType() == TicketDTO.TicketType.FEATURE)
             ticket = new FeatureRequestForm();
 
-        //TODO improve this
         PersonDAO personDAO = new PersonDAO();
-        User user = (User) personDAO.getUserByName(ticketDTO.userName);
+        User user = (User) personDAO.getUserByName(ticketDTO.creator);
 
         if(user != null){
             ticket.setUser(user);
@@ -78,7 +72,7 @@ public class TicketService {
             }
 
         }else{
-            throw new InvalidNameException("There are no records of the username: "+ticketDTO.userName);
+            throw new InvalidNameException("There are no records of the username: "+ticketDTO.creator);
         }
         return ticketDTO;
     }
@@ -87,7 +81,8 @@ public class TicketService {
         Ticket ticket = ticketDAO.read(Long.valueOf(id));
         TicketDTO ticketDTO = null;
         if(ticket != null){
-            ticketDTO = new TicketDTO(ticket.getTitle(), ticket.getClass().getSimpleName(),
+            TicketDTO.TicketType type = (ticket instanceof BugForm) ? TicketDTO.TicketType.BUG : TicketDTO.TicketType.FEATURE;
+            ticketDTO = new TicketDTO(ticket.getTitle(),type,
                     ticket.getUser().getName(), ticket.getState().toString(), ticket.getTag().toString());
             ticketDTO.setId(ticket.getId());
         }

@@ -2,10 +2,7 @@ package service;
 
 import dao.EntityManagerHelper;
 import dao.PersonDAO;
-import domain.Person;
-import domain.SupportMember;
-import domain.Ticket;
-import domain.User;
+import domain.*;
 import dto.PersonDTO;
 import dto.SupportMemberDTO;
 import dto.TicketDTO;
@@ -68,12 +65,14 @@ public class PersonService {
 
     private void populateTicketList(List<TicketDTO> ticketDTOList, Ticket ticket) {
         TicketDTO ticketDTO = new TicketDTO();
+        TicketDTO.TicketType type = (ticket instanceof BugForm) ? TicketDTO.TicketType.BUG : TicketDTO.TicketType.FEATURE;
+
         ticketDTO.setId(ticket.getId());
-        ticketDTO.setType(ticket.getClass().getSimpleName());
+        ticketDTO.setType(type);
         ticketDTO.setTitle(ticket.getTitle());
         ticketDTO.setState(ticket.getState().toString());
         ticketDTO.setTag(ticket.getTag().toString());
-        ticketDTO.setUserName(ticket.getUser().getName());
+        ticketDTO.setCreator(ticket.getUser().getName());
         ticketDTOList.add(ticketDTO);
     }
 
@@ -85,11 +84,14 @@ public class PersonService {
 
             Person person = null;
 
-            if(personDTO.getType() == PersonDTO.PersonType.USER){
+            if(personDTO instanceof UserDTO){
                 person = new User();
+                personDTO.setType(PersonDTO.PersonType.USER);
+
             }
-            else if (personDTO.getType() == PersonDTO.PersonType.SUPPORT_MEMBER) {
+            else if(personDTO instanceof SupportMemberDTO) {
                 person = new SupportMember();
+                personDTO.setType(PersonDTO.PersonType.SUPPORT_MEMBER);
             }
 
             person.setName(personDTO.getName());
