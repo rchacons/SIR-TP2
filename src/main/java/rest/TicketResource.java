@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 @Path("/ticket")
 public class TicketResource {
 
-    Logger log = Logger.getLogger(TicketResource.class.getSimpleName());
     TicketService ticketService = new TicketService();
 
     @GET
