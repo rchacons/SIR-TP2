@@ -56,7 +56,7 @@ public class MyServlet extends HttpServlet {
                 ticket.setTitle(request.getParameter("title"));
                 //ticket.setComments(request.getParameter("comments"));
                 ticket.setTag(TagEnum.valueOf(request.getParameter("tag")));
-                //ticket.setSupportMemberList();
+                ticket.setState(StateEnum.OPEN);
 
                 ticketDAO.save(ticket);
                 break;
@@ -85,7 +85,6 @@ public class MyServlet extends HttpServlet {
                             ticket1.getSupportMemberList().add(supportM);
                         }
                         else{
-
                             ticket1.setSupportMemberList(List.of(supportM));
                         }
                         ticketDAO.update(ticket1);
@@ -202,14 +201,17 @@ public class MyServlet extends HttpServlet {
         printWriter.println("<tbody>");
 
         for (Ticket ticket : ticketList){
-            for(SupportMember supportMember : ticket.getSupportMemberList()){
-                printWriter.println("<tr>");
+            if(ticket.getSupportMemberList() != null){
+                for(SupportMember supportMember : ticket.getSupportMemberList()){
+                    printWriter.println("<tr>");
 
-                printWriter.println("<td>"+ticket.getId()+"</td>");
-                printWriter.println("<td>"+supportMember.getName()+"</td>");
+                    printWriter.println("<td>"+ticket.getId()+"</td>");
+                    printWriter.println("<td>"+supportMember.getName()+"</td>");
 
-                printWriter.println("</tr>");
+                    printWriter.println("</tr>");
+                }
             }
+
         }
 
 

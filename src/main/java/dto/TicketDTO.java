@@ -1,5 +1,7 @@
 package dto;
 
+import java.util.List;
+
 public class TicketDTO {
 
 
@@ -7,6 +9,7 @@ public class TicketDTO {
     public String title;
     public TicketType type;
     public String creator;
+    public List<String> assignedSupport;
     public String state;
     public String tag;
 
@@ -75,6 +78,16 @@ public class TicketDTO {
     public void setId(Long id) {
         this.id = id;
     }
+
+
+    public List<String> getAssignedSupport() {
+        return assignedSupport;
+    }
+
+    public void setAssignedSupport(List<String> assignedSupport) {
+        this.assignedSupport = assignedSupport;
+    }
+
 
     @Override
     public String toString() {

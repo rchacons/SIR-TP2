@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PersonService {
 
@@ -73,6 +74,7 @@ public class PersonService {
         ticketDTO.setState(ticket.getState().toString());
         ticketDTO.setTag(ticket.getTag().toString());
         ticketDTO.setCreator(ticket.getUser().getName());
+        ticketDTO.setAssignedSupport(ticket.getSupportMemberList().stream().map(s->s.getName()).collect(Collectors.toList()));
         ticketDTOList.add(ticketDTO);
     }
 

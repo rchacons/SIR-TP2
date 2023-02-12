@@ -10,7 +10,9 @@ import javax.naming.InvalidNameException;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TicketService {
 
@@ -48,16 +50,26 @@ public class TicketService {
             ticket = new FeatureRequestForm();
 
         PersonDAO personDAO = new PersonDAO();
-        User user = (User) personDAO.getUserByName(ticketDTO.creator);
+        User user = (User) personDAO.getUserByName(ticketDTO.getCreator());
 
         if(user != null){
             ticket.setUser(user);
             ticket.setTitle(ticketDTO.getTitle());
             ticket.setState(StateEnum.valueOf(ticketDTO.getState()));
-            ticket.setTag(TagEnum.valueOf(ticketDTO.tag));
+            ticket.setTag(TagEnum.valueOf(ticketDTO.getTag()));
 
-            // TODO how to add different SupportMembers from a dto?
-            //ticket.addSupportMemberList..
+            List<Person> supportMemberList = personDAO.getListSupportMemberByName(ticketDTO.getAssignedSupport());
+
+            if(supportMemberList != null)
+            {
+                ticket.setSupportMemberList(supportMemberList.stream()
+                        .filter(p -> p instanceof SupportMember)
+                        .map(p -> (SupportMember) p)
+                        .collect(Collectors.toList()));
+            }
+            else{
+                ticketDTO.setAssignedSupport(null);
+            }
 
             try{
                 entityManager.getTransaction().begin();
@@ -85,6 +97,13 @@ public class TicketService {
             ticketDTO = new TicketDTO(ticket.getTitle(),type,
                     ticket.getUser().getName(), ticket.getState().toString(), ticket.getTag().toString());
             ticketDTO.setId(ticket.getId());
+            if (ticket.getSupportMemberList() != null) {
+                List<String> supportMemberList = ticket.getSupportMemberList().stream().map(s->s.getName()).collect(Collectors.toList());
+                ticketDTO.setAssignedSupport(supportMemberList);
+            } else {
+                ticketDTO.setAssignedSupport(Collections.emptyList());
+            }
+
         }
 
         return ticketDTO;

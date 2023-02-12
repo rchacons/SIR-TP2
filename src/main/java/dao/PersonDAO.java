@@ -26,17 +26,16 @@ public class PersonDAO extends GenericDaoJpaImpl<Person,Long> {
             return null;
         }
     }
-    public Person getSupportMemberByName(String userName){
-        CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
-        CriteriaQuery<Person> criteriaQuery = criteriaBuilder.createQuery(Person.class);
-        Root<Person> root = criteriaQuery.from(Person.class);
-        criteriaQuery.select(root);
-        criteriaQuery.where(criteriaBuilder.and(criteriaBuilder.equal(root.type(), SupportMember.class),
-                criteriaBuilder.equal(root.get("name"),userName)));
-
+    public List<Person> getListSupportMemberByName(List<String> listNamesOfSupport){
         try{
-            return this.entityManager.createQuery(criteriaQuery).getSingleResult();
-        } catch (NoResultException e){
+            CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
+            CriteriaQuery<Person> criteriaQuery = criteriaBuilder.createQuery(Person.class);
+            Root<Person> root = criteriaQuery.from(Person.class);
+            criteriaQuery.select(root);
+            criteriaQuery.where(criteriaBuilder.and(criteriaBuilder.equal(root.type(), SupportMember.class),
+                    root.get("name").in(listNamesOfSupport)));
+            return this.entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (NoResultException | NullPointerException e) {
             return null;
         }
     }
