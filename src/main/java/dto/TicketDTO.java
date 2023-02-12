@@ -1,16 +1,30 @@
 package dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
 
 public class TicketDTO {
 
 
     public Long id;
+
+    @Schema(description = "Title of the ticket")
     public String title;
+
+    @Schema(description = "Type of the ticket : BUG or FEATURE")
     public TicketType type;
+
+    @Schema(description = "Name of the ticket's creator (user)")
     public String creator;
+
+    @Schema(description = "List of names of the support members in charge of the ticket")
     public List<String> assignedSupport;
+
+    @Schema(description = "State of ticket : OPEN by default.")
     public String state;
+
+    @Schema(description = "Tag of the ticket : TAG1 or TAG2 (for the moment)")
     public String tag;
 
     public TicketDTO(){

@@ -1,9 +1,12 @@
 package dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
 
 public class SupportMemberDTO extends PersonDTO{
 
+    @Schema(description = "List of tickets assigned to the member")
     private List<TicketDTO> assignedTicketsList;
 
     public List<TicketDTO> getAssignedTicketsList() {

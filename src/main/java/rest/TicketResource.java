@@ -1,6 +1,8 @@
 package rest;
 
 import dto.TicketDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import service.TicketService;
 
 import javax.naming.InvalidNameException;
@@ -17,6 +19,9 @@ public class TicketResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "Find ticket by its id"
+    )
     public TicketDTO getTicketById(@PathParam("id") String id) {
         return ticketService.getTicketById(id);
     }
@@ -24,6 +29,12 @@ public class TicketResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "Creates ticket",
+            responses = {
+                    @ApiResponse( responseCode = "200", description = "Ticket created with success"),
+                    @ApiResponse( responseCode = "400", description = "User provided doesn't exists")
+            })
     public Response createTicket(TicketDTO ticket) {
         try {
             TicketDTO ticketDTO = ticketService.createTicket(ticket);

@@ -4,6 +4,9 @@ import dto.PersonDTO;
 import dto.SupportMemberDTO;
 import dto.TicketDTO;
 import dto.UserDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import service.PersonService;
 
 import javax.naming.InvalidNameException;
@@ -18,6 +21,9 @@ public class PersonResource {
 
     @GET
     @Path("/{id}")
+    @Operation(
+            summary = "Find user/supportMember by its id"
+    )
     @Produces(MediaType.APPLICATION_JSON)
     public PersonDTO getPersonById(@PathParam("id") String id){
         return personService.getPersonById(id);
@@ -27,7 +33,17 @@ public class PersonResource {
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPerson(UserDTO person) {
+    @Operation(
+            summary = "Creates user",
+            responses = {
+                    @ApiResponse( responseCode = "200", description = "User saved with success"),
+                    @ApiResponse( responseCode = "400", description = "Username already exists")
+    }
+    )
+    public Response createPerson(
+            @Parameter(
+                    description = "User to be saved"
+            ) UserDTO person) {
         try {
             PersonDTO personDTO = personService.createPerson(person);
             return Response.ok().
@@ -46,6 +62,13 @@ public class PersonResource {
     @Path("/support")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "Creates support member",
+            responses = {
+                    @ApiResponse( responseCode = "200", description = "Support member saved with success"),
+                    @ApiResponse( responseCode = "400", description = "Name already exists")
+            }
+    )
     public Response createPerson(SupportMemberDTO supportMemberDTO) {
         try {
             PersonDTO personDTO = personService.createPerson(supportMemberDTO);
