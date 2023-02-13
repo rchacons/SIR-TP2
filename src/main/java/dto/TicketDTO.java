@@ -15,10 +15,10 @@ public class TicketDTO {
     @Schema(description = "Type of the ticket : BUG or FEATURE")
     public TicketType type;
 
-    @Schema(description = "Name of the ticket's creator (user)")
+    @Schema(description = "Name of the ticket's creator (user)",nullable = false)
     public String creator;
 
-    @Schema(description = "List of names of the support members in charge of the ticket")
+    @Schema(description = "List of names of the support members in charge of the ticket.",nullable = true)
     public List<String> assignedSupport;
 
     @Schema(description = "State of ticket : OPEN by default.")

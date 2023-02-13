@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UserDTO extends PersonDTO {
 
-    @Schema(description = "List of tickets that the user have created")
+    @Schema(description = "List of tickets that the user have created", nullable = true)
     private List<TicketDTO> createdTicketsList;
 
     public List<TicketDTO> getCreatedTicketsList() {
