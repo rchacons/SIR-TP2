@@ -5,7 +5,8 @@
 Ce guide vous permettra de tester les differentes parties du TP.
 ## Diagramme de classes
 
-Nous avons concu le diagramme de classes suivant pour notre implementation:
+Notre implementation a été concu à partir du diagramme de classes suivant :
+![alt classDiagram](./classDiagram.png)
 
 ## Partie JPA
 
@@ -30,21 +31,21 @@ http://localhost:8080/myform.html
 ## Partie Rest
 Afin de démarrer le WS REST, veuillez lancer la classe **RestServer**.
 
-Nous avons cree 5 requêtes REST différentes que vous pouvez lancer à l'aide de Postman:
+Nous avons cree 5 requêtes REST différentes que vous pouvez lancer à l'aide de Postman :
 
 1. **Obtenir un ticket**
 
-Type  | Url
-------------- | -------------
-GET  | http://localhost:8090/ticket/{id}
+| Type | Url                               |
+|------|-----------------------------------|
+| GET  | http://localhost:8090/ticket/{id} |
 
 2. **Créer un ticket**
 
-Type  | Url
-------------- | -------------
-POST  | http://localhost:8090/ticket
+| Type | Url                          |
+|------|------------------------------|
+| POST | http://localhost:8090/ticket |
 
-Dont le corps de la requête peut être:
+Dont le corps de la requête peut être :
 ```json
 {
     "title": "Ticket title",
@@ -59,17 +60,17 @@ Dont le corps de la requête peut être:
 
 3. **Obtenir une personne (user ou support member).**
 
-Type  | Url
-------------- | -------------
-GET  | http://localhost:8090/person/{id}
-   
+| Type | Url                               |
+|------|-----------------------------------|
+| GET  | http://localhost:8090/person/{id} |
+
 4. **Creer un user**
 
-Type  | Url
-------------- | -------------
-POST  | http://localhost:8090/person/user
+| Type | Url                               |
+|------|-----------------------------------|
+| POST | http://localhost:8090/person/user |
 
-Dont le corps de la requête peut être:
+Dont le corps de la requête peut être :
 ```json
 {
   "name": "User name"
@@ -78,11 +79,11 @@ Dont le corps de la requête peut être:
 
 5. **Creer un support member**
 
-Type  | Url
-------------- | -------------
-POST  | http://localhost:8090/person/support
+| Type | Url                                  |
+|------|--------------------------------------|
+| POST | http://localhost:8090/person/support |
 
-Dont le corps de la requête peut être:
+Dont le corps de la requête peut être :
 ```json
 {
   "name": "SupportMember name"
@@ -92,7 +93,7 @@ Dont le corps de la requête peut être:
 ### OpenApi
 Nous avons integré **openAPi** avec **SwaggerUI** afin de fournir une documentation plus lisible de notre API.
 
-Pour la visualiser, il faut initialiser le serveur : **RestServer**, et accéder à l'url:
+Pour la visualiser, il faut initialiser le serveur : **RestServer**, et accéder à l'url :
 ```
 http://localhost:8090/api/
 ```

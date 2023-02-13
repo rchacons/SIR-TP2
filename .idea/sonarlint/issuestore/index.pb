@@ -5,14 +5,6 @@ E
 run-hsqldb-server.bat,0/1/01d808f0955e2423749b1b8935510831def5dd96
 Q
 !src/main/java/dao/GenericDao.java,d/4/d490f5a6ad449d48ccb72bd63186adb01f4d7c4e
-P
- src/main/java/domain/Person.java,9/3/939164b938ee64467fbfce3de74333e054d643fd
-N
-src/main/java/domain/User.java,e/f/ef0a15c939b4b1058f15850d49ea05824fdd2e5f
-W
-'src/main/java/domain/SupportMember.java,5/4/5427edb6c6b5ba882b8bd91a04a5b76596f56a7a
-P
- src/main/java/domain/Ticket.java,2/e/2e158920bcd5e1b3ec3e094e7a44c8b69273df7d
 V
 &src/main/webapp/swagger/swagger-ui.css,3/4/34292fe68fb7ede65f3d3e7e970241bda254d18f
 X
@@ -23,3 +15,15 @@ g
 7src/main/webapp/swagger/swagger-ui-standalone-preset.js,2/7/27a7ebab27c18c24c6d15e996a404dc83025c994
 Q
 !src/main/webapp/swagger/index.css,5/0/5041fd662741905411d826d1187cf25da8bfdde8
+V
+&src/main/java/rest/PersonResource.java,d/e/de9edaba5bd94d215dcc2494912b931e5348310f
+P
+ src/main/java/dto/PersonDTO.java,c/d/cdf3e7d4c109312e0fab78b528439641bd27fb0d
+R
+"src/main/java/RestApplication.java,b/8/b8d4d0b2bfb282472802ace8392018133b9e31fb
+W
+'src/main/java/rest/SwaggerResource.java,d/9/d9ccd95cd3d9a0843259d57788c0a5bae44391e5
+T
+$src/main/java/servlet/MyServlet.java,3/1/312f4afd32629d753f7aa3cab84e65b4a1e6df6c
+N
+src/main/java/dto/UserDTO.java,c/e/ce72312d20c806b4ded51f14baaee9b84281cfdb
