@@ -12,7 +12,6 @@ import java.util.List;
 
 public class PersonDAO extends GenericDaoJpaImpl<Person,Long> {
 
-
     public Person getPersonByName(String userName){
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<Person> criteriaQuery = criteriaBuilder.createQuery(Person.class);

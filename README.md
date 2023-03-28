@@ -11,6 +11,7 @@ Notre implementation a été concu à partir du diagramme de classes suivant :
 ## Partie JPA
 
 Afin de tester la partie JPA et alimenter la base de donnees, veuillez modifier l'user, url et mot de passe du fichier **persistence.xml**, et lancez ensuite la classe **JPATest**.
+![alt classDiagram](./diagramGenerate.png)
 
 ## Partie Servlet
 

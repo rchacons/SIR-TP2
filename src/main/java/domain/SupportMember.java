@@ -7,13 +7,11 @@ import java.util.List;
 @DiscriminatorValue("supportMember")
 public class SupportMember extends Person{
 
-
     private List<Ticket> ticketList;
 
     public SupportMember(){
         // Constructor
     }
-
 
     @ManyToMany(targetEntity = Ticket.class, mappedBy = "supportMemberList")
     public List<Ticket> getTicketList() {
