@@ -4,6 +4,7 @@ import dto.TicketDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.checkerframework.checker.units.qual.A;
+import org.jboss.resteasy.plugins.providers.ReaderProvider;
 import service.TicketService;
 
 import javax.naming.InvalidNameException;
@@ -37,8 +38,15 @@ public class TicketResource {
                     @ApiResponse ( responseCode = "400", description = "Any ticket exist")
             }
     )
-    public List<TicketDTO> getAllTicket() {
-        return ticketService.getAllTicketsDto();
+    public Response getAllTicket() {
+        try {
+            List <TicketDTO> list = this.ticketService.getAllTicketsDto();
+            return Response.ok().
+                    entity(list).build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage()).build();
+        }
     }
 
     @POST
