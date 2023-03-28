@@ -3,12 +3,14 @@ package rest;
 import dto.TicketDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.checkerframework.checker.units.qual.A;
 import service.TicketService;
 
 import javax.naming.InvalidNameException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Path("/ticket")
@@ -24,6 +26,19 @@ public class TicketResource {
     )
     public TicketDTO getTicketById(@PathParam("id") String id) {
         return ticketService.getTicketById(id);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "Retrieve all ticket",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Tickets were retrieved with success"),
+                    @ApiResponse ( responseCode = "400", description = "Any ticket exist")
+            }
+    )
+    public List<TicketDTO> getAllTicket() {
+        return ticketService.getAllTicketsDto();
     }
 
     @POST

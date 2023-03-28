@@ -29,14 +29,7 @@ public class TicketService {
 
         List<TicketDTO> ticketDTOS = new ArrayList<TicketDTO>();
 
-        for (Ticket ticket : tickets) {
-            TicketDTO.TicketType type = (ticket instanceof BugForm) ? TicketDTO.TicketType.BUG : TicketDTO.TicketType.FEATURE;
-
-            ticketDTOS.add(new TicketDTO(ticket.getTitle(), type, ticket.getUser().getName(),
-                    ticket.getState().toString(), ticket.getTag().toString()));
-        }
-
-        return ticketDTOS;
+        return getTicketDTOS(tickets, ticketDTOS);
     }
 
     @Transactional
@@ -108,5 +101,25 @@ public class TicketService {
 
         return ticketDTO;
 
+    }
+    public List<Ticket> getAllTickets() {
+        return this.ticketDAO.getAllTickets();
+    }
+
+    public List<TicketDTO> getAllTicketsDto() {
+        List<Ticket> tickets = this.getAllTickets();
+
+        List<TicketDTO> ticketDTOS = new ArrayList<>();
+
+        return getTicketDTOS(tickets, ticketDTOS);
+    }
+
+    private List<TicketDTO> getTicketDTOS(List<Ticket> tickets, List<TicketDTO> ticketDTOS) {
+        for(Ticket ticket : tickets) {
+            TicketDTO.TicketType type = (ticket instanceof BugForm) ? TicketDTO.TicketType.BUG : TicketDTO.TicketType.FEATURE;
+            ticketDTOS.add(new TicketDTO(ticket.getTitle(), type, ticket.getUser().getName(),
+                    ticket.getState().toString(), ticket.getTag().toString()));
+        }
+        return ticketDTOS;
     }
 }
