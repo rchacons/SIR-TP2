@@ -15,14 +15,8 @@ g
 7src/main/webapp/swagger/swagger-ui-standalone-preset.js,2/7/27a7ebab27c18c24c6d15e996a404dc83025c994
 Q
 !src/main/webapp/swagger/index.css,5/0/5041fd662741905411d826d1187cf25da8bfdde8
-V
-&src/main/java/rest/PersonResource.java,d/e/de9edaba5bd94d215dcc2494912b931e5348310f
 P
  src/main/java/dto/PersonDTO.java,c/d/cdf3e7d4c109312e0fab78b528439641bd27fb0d
-R
-"src/main/java/RestApplication.java,b/8/b8d4d0b2bfb282472802ace8392018133b9e31fb
-W
-'src/main/java/rest/SwaggerResource.java,d/9/d9ccd95cd3d9a0843259d57788c0a5bae44391e5
 T
 $src/main/java/servlet/MyServlet.java,3/1/312f4afd32629d753f7aa3cab84e65b4a1e6df6c
 N
