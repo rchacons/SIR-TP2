@@ -13,6 +13,7 @@ import javax.naming.InvalidNameException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/person")
 public class PersonResource {
@@ -82,5 +83,26 @@ public class PersonResource {
                     .build();
         }
 
+    }
+
+    @GET
+    @Path("/user")
+    @Operation(
+            summary = "Gets all users"
+    )
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PersonDTO> getAllUser(){
+        return personService.getUsers();
+    }
+
+
+    @GET
+    @Path("/support")
+    @Operation(
+            summary = "Gets all support members"
+    )
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PersonDTO> getAllSupportMember(){
+        return personService.getSupportMembers();
     }
 }

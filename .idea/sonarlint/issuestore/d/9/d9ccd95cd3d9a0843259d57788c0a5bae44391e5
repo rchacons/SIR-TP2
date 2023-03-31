@@ -1,9 +1,0 @@
-
-o	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(èš¯ùÿÿÿÿ8‡ÀÜÓä0
-C
-java:S1168"&Return an empty array instead of null.(¥¹ï8“ÀÜÓä0
-j	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(æ•Ú8•ÀÜÓä0
-C
-java:S1168"&Return an empty array instead of null.(¥¹ï8™ÀÜÓä0
-F
-java:S1068"*Remove this unused "logger" private field.(›ˆáh8›ÀÜÓä0

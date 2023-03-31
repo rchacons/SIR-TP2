@@ -11,8 +11,7 @@ import dto.UserDTO;
 import javax.naming.InvalidNameException;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PersonService {
@@ -31,34 +30,11 @@ public class PersonService {
         if(person != null){
 
             if(person instanceof User){
-                UserDTO userDTO = new UserDTO();
-                userDTO.setId(person.getId());
-                userDTO.setName(person.getName());
-
-                List<TicketDTO> ticketDTOList = new ArrayList<>();
-                for(Ticket ticket : ((User) person).getTicketList()){
-                    populateTicketList(ticketDTOList, ticket);
-                }
-                userDTO.setCreatedTicketsList(ticketDTOList);
-                userDTO.setType(PersonDTO.PersonType.USER);
-
-                return userDTO;
-
+                return populateUserDTO(person);
             }
             else if (person instanceof SupportMember){
-                SupportMemberDTO supportMemberDTO = new SupportMemberDTO();
-                supportMemberDTO.setId(person.getId());
-                supportMemberDTO.setName(person.getName());
-                supportMemberDTO.setType(PersonDTO.PersonType.SUPPORT_MEMBER);
-                List<TicketDTO> ticketDTOList = new ArrayList<>();
-
-                for(Ticket ticket : ((SupportMember) person).getTicketList()){
-                    populateTicketList(ticketDTOList, ticket);
-                }
-                supportMemberDTO.setAssignedTicketsList(ticketDTOList);
-
-                return supportMemberDTO;
-            }
+                return populateSupportMemberDTO(person);
+                                }
         }
 
         return null;
@@ -121,5 +97,69 @@ public class PersonService {
 
     private boolean isUsernameAvailable(String name) {
         return personDAO.getPersonByName(name) == null;
+    }
+
+    public List<PersonDTO> getUsers() {
+
+        List<Person> userList = Optional.ofNullable(personDAO.getAllUsers()).orElse(Collections.emptyList());
+        List<PersonDTO> userDTOList = new ArrayList<>();
+
+        if(!userList.isEmpty()){
+            for(Person user : userList){
+                UserDTO userDTO = populateUserDTO(user);
+                userDTOList.add(userDTO);
+            }
+        }
+
+        return userDTOList;
+
+    }
+
+    public List<PersonDTO> getSupportMembers(){
+
+        List<Person> supportMemberList = Optional.ofNullable(personDAO.getAllSupportMembers()).orElse(Collections.emptyList());
+        List<PersonDTO> supportMemberDTOList = new ArrayList<>();
+
+        if(!supportMemberList.isEmpty()){
+            for(Person supportMember : supportMemberList){
+                SupportMemberDTO supportMemberDTO = populateSupportMemberDTO(supportMember);
+                supportMemberDTOList.add(supportMemberDTO);
+            }
+        }
+
+        return supportMemberDTOList;
+    }
+
+    private SupportMemberDTO populateSupportMemberDTO(Person person) {
+        SupportMemberDTO supportMemberDTO = new SupportMemberDTO();
+        supportMemberDTO.setId(person.getId());
+        supportMemberDTO.setName(person.getName());
+        supportMemberDTO.setType(PersonDTO.PersonType.SUPPORT_MEMBER);
+        List<TicketDTO> ticketDTOList = new ArrayList<>();
+
+        for(Ticket ticket : ((SupportMember) person).getTicketList()){
+            populateTicketList(ticketDTOList, ticket);
+        }
+        supportMemberDTO.setAssignedTicketsList(ticketDTOList);
+
+        return supportMemberDTO;
+
+    }
+
+    private UserDTO populateUserDTO(Person user) {
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+
+        List<TicketDTO> ticketDTOList = new ArrayList<>();
+        for(Ticket ticket : ((User) user).getTicketList()){
+            populateTicketList(ticketDTOList, ticket);
+        }
+        userDTO.setCreatedTicketsList(ticketDTOList);
+        userDTO.setType(PersonDTO.PersonType.USER);
+
+        return userDTO;
+
     }
 }
